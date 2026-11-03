@@ -51,10 +51,10 @@ FRAME = np.zeros((32, 32, 3), dtype=np.uint8)
 # ========================================
 @pytest.fixture
 def clean_registry() -> Iterator[None]:
-    saved = dict(detector_module._REGISTRY)
+    before = set(detector_module.BACKENDS.available())
     yield
-    detector_module._REGISTRY.clear()
-    detector_module._REGISTRY.update(saved)
+    for name in set(detector_module.BACKENDS.available()) - before:
+        detector_module.BACKENDS.unregister(name)
 
 
 def test_custom_backend_round_trip(clean_registry: None) -> None:
@@ -118,7 +118,7 @@ def fake_ultralytics(monkeypatch: pytest.MonkeyPatch, clean_registry: None) -> N
     monkeypatch.setitem(sys.modules, "ultralytics", module)
     # Force a fresh import so the backend registers against the clean registry.
     monkeypatch.delitem(sys.modules, "ailab_vision.backends.yolo", raising=False)
-    detector_module._REGISTRY.pop("yolo", None)
+    detector_module.BACKENDS.unregister("yolo")
 
 
 def test_yolo_backend_converts_results(fake_ultralytics: None) -> None:
@@ -135,6 +135,6 @@ def test_yolo_backend_explains_missing_dependency(
 ) -> None:
     monkeypatch.setitem(sys.modules, "ultralytics", None)  # makes the import fail
     monkeypatch.delitem(sys.modules, "ailab_vision.backends.yolo", raising=False)
-    detector_module._REGISTRY.pop("yolo", None)
+    detector_module.BACKENDS.unregister("yolo")
     with pytest.raises(ImportError, match=r"ailab-vision\[yolo\]"):
         create_detector("yolo")

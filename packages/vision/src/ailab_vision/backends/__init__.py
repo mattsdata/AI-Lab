@@ -15,7 +15,7 @@
 #    - Intentionally imports nothing. Backends are loaded on demand by create_detector(), so
 #      installing the package never forces PyTorch or any other heavy dependency.
 #    - Adding a backend: create a module here, decorate the class with @register_backend("name")
-#      and add the module path to _BUILTIN_MODULES in detector.py.
+#      and add the module path to the `builtins` of BACKENDS in detector.py.
 #
 #  📂 VERSION HISTORY
 #

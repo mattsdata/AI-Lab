@@ -4,7 +4,7 @@
 #  File         : packages/vision/src/ailab_vision/__init__.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.0
+#  Version      : V1.1
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -19,6 +19,9 @@
 #
 #    V1.0 (2026-11-03) - Mathew Varghese
 #      - Initial release: detection interface, YOLO backend, IoU tracker, video helpers.
+#
+#    V1.1 (2026-11-03) - Mathew Varghese
+#      - Backend registry moved to mattslib.Registry (shared with nlp).
 # ==================================================================================================
 """ailab-vision: model-independent object detection and tracking."""
 
@@ -39,7 +42,7 @@ from ailab_vision.types import BoundingBox, Detection
 # ========================================
 # 📂 Package Metadata
 # ========================================
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "Mathew Varghese"
 
 # ========================================

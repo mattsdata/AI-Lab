@@ -1,6 +1,6 @@
 # ailab-vision
 
-*Author: **Mathew Varghese** · Version 1.0*
+*Author: **Mathew Varghese** · Version 1.1*
 
 Model-independent object detection and tracking. Application code talks to one small
 interface; the model behind it (YOLO today, something else tomorrow) is a configuration choice.

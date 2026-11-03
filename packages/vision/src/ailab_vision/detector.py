@@ -4,7 +4,7 @@
 #  File         : packages/vision/src/ailab_vision/detector.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.0
+#  Version      : V1.1
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -26,11 +26,16 @@
 #    - Built-in backends are imported lazily, on first use. Importing this package therefore
 #      never pulls in heavy libraries such as PyTorch unless that backend is actually requested.
 #    - Unknown backend names fail with the list of valid ones, so a typo is a one-second fix.
+#    - The registry itself is mattslib.Registry, shared with the nlp package (ADR-0003).
 #
 #  📂 VERSION HISTORY
 #
 #    V1.0 (2026-11-03) - Mathew Varghese
 #      - Initial release: Detector protocol, backend registry, filter_detections.
+#
+#    V1.1 (2026-11-03) - Mathew Varghese
+#      - Registry now provided by mattslib.Registry (extracted on second use, ADR-0003).
+#      - Backend options may now include one called `name` (positional-only name argument).
 # ==================================================================================================
 """A single detector interface with pluggable, lazily loaded backends."""
 
@@ -39,12 +44,12 @@
 # ========================================
 from __future__ import annotations
 
-import importlib
 from collections.abc import Callable, Iterable
 from typing import Any, Protocol, TypeVar, runtime_checkable
 
 import numpy as np
 import numpy.typing as npt
+from mattslib import Registry
 
 from ailab_vision.types import Detection
 
@@ -67,40 +72,23 @@ F = TypeVar("F", bound=Callable[..., Detector])
 # ========================================
 # 📂 Backend Registry
 # ========================================
-_REGISTRY: dict[str, Callable[..., Detector]] = {}
-
-# Built-in backends, imported only when requested (see DESIGN NOTES).
-_BUILTIN_MODULES = {"yolo": "ailab_vision.backends.yolo"}
+# Built-in backends are listed by module and imported only when requested (see DESIGN NOTES).
+BACKENDS: Registry[Detector] = Registry("backend", builtins={"yolo": "ailab_vision.backends.yolo"})
 
 
 def register_backend(name: str) -> Callable[[F], F]:
     """Register a detector class or factory under ``name``."""
-
-    def decorator(factory: F) -> F:
-        if name in _REGISTRY:
-            raise ValueError(f"backend {name!r} is already registered")
-        _REGISTRY[name] = factory
-        return factory
-
-    return decorator
+    return BACKENDS.register(name)
 
 
 def available_backends() -> list[str]:
     """Names that create_detector() accepts, including built-ins not yet loaded."""
-    return sorted(set(_REGISTRY) | set(_BUILTIN_MODULES))
+    return BACKENDS.available()
 
 
-def create_detector(name: str, **options: Any) -> Detector:
+def create_detector(name: str, /, **options: Any) -> Detector:
     """Create the backend registered as ``name``, passing ``options`` to it."""
-    if name not in _REGISTRY and name in _BUILTIN_MODULES:
-        importlib.import_module(_BUILTIN_MODULES[name])  # registers itself on import
-    try:
-        factory = _REGISTRY[name]
-    except KeyError:
-        raise ValueError(
-            f"unknown backend {name!r}; available: {', '.join(available_backends())}"
-        ) from None
-    return factory(**options)
+    return BACKENDS.create(name, **options)
 
 
 # ========================================
