@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/src/ailab_finance/__init__.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.2
+#  Version      : V1.3
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -24,6 +24,9 @@
 #
 #    V1.2 (2026-11-03) - Mathew Varghese
 #      - Added SEC EDGAR fundamentals: point-in-time credit inputs with provenance.
+#
+#    V1.3 (2026-11-03) - Mathew Varghese
+#      - Added credit scorecard: WoE, points, reason codes, validation pack, fairness check.
 # ==================================================================================================
 """ailab-finance: market analytics and corporate early warning (research use only)."""
 
@@ -54,12 +57,21 @@ from ailab_finance.metrics import (
     sortino_ratio,
 )
 from ailab_finance.outlook import DISCLAIMER, ReturnOutlook, historical_outlook
+from ailab_finance.scorecard import (
+    Explanation,
+    GroupOutcome,
+    Scorecard,
+    ValidationReport,
+    WoeBinning,
+    group_outcomes,
+    validate,
+)
 from ailab_finance.types import Instrument, Money, PriceSeries
 
 # ========================================
 # 📂 Package Metadata
 # ========================================
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 __author__ = "Mathew Varghese"
 
 # ========================================
@@ -72,20 +84,26 @@ __all__ = [
     "DataSource",
     "DefaultEstimate",
     "EdgarClient",
+    "Explanation",
     "Fact",
     "FeatureSet",
+    "GroupOutcome",
     "Instrument",
     "Money",
     "OutlookModel",
     "Prediction",
     "PriceSeries",
     "ReturnOutlook",
+    "Scorecard",
     "SentimentLike",
+    "ValidationReport",
     "WalkForwardReport",
+    "WoeBinning",
     "YahooSource",
     "annualised_volatility",
     "build_features",
     "forward_returns",
+    "group_outcomes",
     "historical_outlook",
     "historical_var",
     "latest_fact",
@@ -96,6 +114,7 @@ __all__ = [
     "sharpe_ratio",
     "simple_returns",
     "sortino_ratio",
+    "validate",
     "walk_forward",
     "warning_flag",
 ]
