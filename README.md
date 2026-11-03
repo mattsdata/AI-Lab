@@ -11,11 +11,11 @@ the same building blocks can serve any industry.
 Packages never import frameworks. This rule is enforced in CI and explained in
 [ADR-0001](docs/adr/0001-layered-architecture.md).
 
-## Packages (planned)
+## Packages
 
 | Package | Scope | Status |
 |---|---|---|
-| `vision` | Object detection, tracking, video I/O | Planned |
+| [`vision`](packages/vision) | Object detection, tracking, video I/O | ✅ V1.0 |
 | `nlp` | LLM backend interface, RAG, evaluation | Planned |
 | `timeseries` | Forecasting, anomaly detection | Planned |
 | `speech` | Speech-to-text, text-to-speech | Planned |
