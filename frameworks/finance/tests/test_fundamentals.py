@@ -60,6 +60,21 @@ FACTS = {
     }
 }
 TICKERS = {"0": {"cik_str": 320193, "ticker": "ACME", "title": "Acme Corp"}}
+SUBMISSIONS = {
+    "filings": {
+        "recent": {
+            "form": ["10-Q", "10-K", "8-K", "10-K"],
+            "filingDate": ["2026-05-01", "2026-02-20", "2026-01-10", "2025-02-18"],
+            "accessionNumber": [
+                "0001-26-000003",
+                "0001-26-000002",
+                "0001-26-000001",
+                "0001-25-000009",
+            ],
+            "primaryDocument": ["q1.htm", "acme-2025.htm", "8k.htm", "acme-2024.htm"],
+        }
+    }
+}
 
 
 class FakeEdgar:
@@ -74,6 +89,10 @@ class FakeEdgar:
         if self.failures:
             self.failures -= 1
             raise TimeoutError("timed out")
+        if "Archives" in url:
+            return b"<html><p>Annual report</p></html>"
+        if "submissions" in url:
+            return json.dumps(SUBMISSIONS).encode()
         return json.dumps(TICKERS if "company_tickers" in url else FACTS).encode()
 
     def sleep(self, seconds: float) -> None:
@@ -170,3 +189,18 @@ def test_default_http_fetch_sends_declared_user_agent(monkeypatch: pytest.Monkey
     monkeypatch.setattr("urllib.request.urlopen", fake_urlopen)
     assert EdgarClient("Research team team@example.com").cik("acme") == 320193
     assert seen["agent"] == "Research team team@example.com"
+
+
+def test_filings_are_point_in_time_and_documents_load() -> None:
+    fake = FakeEdgar()
+    client = fake.client()
+    latest, previous = client.filings("acme", "10-K")
+    assert (latest.filed, latest.document) == (date(2026, 2, 20), "acme-2025.htm")
+    assert previous.filed == date(2025, 2, 18)
+    assert latest.url == (
+        "https://www.sec.gov/Archives/edgar/data/320193/000126000002/acme-2025.htm"
+    )
+    (known,) = client.filings("ACME", "10-K", as_of=date(2026, 1, 31))  # before Feb filing
+    assert known.document == "acme-2024.htm"
+    assert client.filings("ACME", "10-K", limit=1) == [latest]
+    assert "Annual report" in client.filing_document(latest)

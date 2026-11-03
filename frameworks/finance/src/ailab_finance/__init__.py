@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/src/ailab_finance/__init__.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.3
+#  Version      : V1.4
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -27,12 +27,21 @@
 #
 #    V1.3 (2026-11-03) - Mathew Varghese
 #      - Added credit scorecard: WoE, points, reason codes, validation pack, fairness check.
+#
+#    V1.4 (2026-11-03) - Mathew Varghese
+#      - Added annual report analyser (RAG over 10-K filings) and EDGAR filing documents.
 # ==================================================================================================
 """ailab-finance: market analytics and corporate early warning (research use only)."""
 
 # ========================================
 # 📂 Imports
 # ========================================
+from ailab_finance.annual_report import (
+    ANALYST_QUESTIONS,
+    Finding,
+    analyse_report,
+    findings_markdown,
+)
 from ailab_finance.credit import DefaultEstimate, naive_distance_to_default, warning_flag
 from ailab_finance.data import CsvSource, DataSource, YahooSource
 from ailab_finance.forecast import (
@@ -45,7 +54,7 @@ from ailab_finance.forecast import (
     model_outlook,
     walk_forward,
 )
-from ailab_finance.fundamentals import CreditInputs, EdgarClient, Fact, latest_fact
+from ailab_finance.fundamentals import CreditInputs, EdgarClient, Fact, Filing, latest_fact
 from ailab_finance.metrics import (
     annualised_volatility,
     forward_returns,
@@ -71,13 +80,14 @@ from ailab_finance.types import Instrument, Money, PriceSeries
 # ========================================
 # 📂 Package Metadata
 # ========================================
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __author__ = "Mathew Varghese"
 
 # ========================================
 # 📂 Public API
 # ========================================
 __all__ = [
+    "ANALYST_QUESTIONS",
     "DISCLAIMER",
     "CreditInputs",
     "CsvSource",
@@ -87,6 +97,8 @@ __all__ = [
     "Explanation",
     "Fact",
     "FeatureSet",
+    "Filing",
+    "Finding",
     "GroupOutcome",
     "Instrument",
     "Money",
@@ -100,8 +112,10 @@ __all__ = [
     "WalkForwardReport",
     "WoeBinning",
     "YahooSource",
+    "analyse_report",
     "annualised_volatility",
     "build_features",
+    "findings_markdown",
     "forward_returns",
     "group_outcomes",
     "historical_outlook",
