@@ -46,9 +46,9 @@ print(summary.label, round(summary.score, 2))
 from datetime import date
 from ailab_nlp import GdeltClient, rolling_tone
 
-gdelt = GdeltClient()                                     # polite: one request per 5 s by default
+gdelt = GdeltClient()  # polite: one request per 5 s by default
 daily = gdelt.daily_tone('"Microsoft" sourcelang:english', start=date(2019, 1, 1), end=date.today())
-mood = rolling_tone(daily, as_of=date(2024, 3, 1), window_days=7)   # excludes Mar 1 itself
+mood = rolling_tone(daily, as_of=date(2024, 3, 1), window_days=7)  # excludes Mar 1 itself
 recent = gdelt.articles('"Microsoft"', start=date.today().replace(day=1), end=date.today())
 ```
 
