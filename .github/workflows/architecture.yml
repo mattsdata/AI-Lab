@@ -1,0 +1,21 @@
+name: architecture
+
+# Enforces ADR-0001: packages never import frameworks; frameworks stay independent.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  import-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install packages and frameworks
+        run: pip install import-linter -e packages/vision -e frameworks/finance
+      - name: Check import contracts
+        run: lint-imports
