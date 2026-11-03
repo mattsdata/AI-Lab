@@ -1,10 +1,10 @@
 # ailab-nlp
 
-*Author: **Mathew Varghese** · Version 1.0*
+*Author: **Mathew Varghese** · Version 1.1*
 
-Model-independent language components for any AI Lab framework. Version 1.0 provides
-**sentiment analysis**: one interface, a transparent baseline, a financial transformer model,
-and time-weighted aggregation of many texts.
+Model-independent language components for any AI Lab framework. It provides
+**sentiment analysis** (one interface, a transparent baseline, a financial transformer model,
+time-weighted aggregation) and **news data** from the GDELT Project with look-ahead-safe rolling tone.
 
 ```python
 from ailab_nlp import aggregate_sentiment, create_analyzer, time_decay_weights
@@ -28,6 +28,7 @@ print(summary.label, round(summary.score, 2))
 | `backends/lexicon` | Word-list baseline with negation handling and smoothing. Dependency-free and explainable |
 | `backends/finbert` | FinBERT via Hugging Face `transformers`; understands financial phrasing |
 | `aggregate` | Exponential time-decay weights; weighted summary with label shares |
+| `news` | `GdeltClient`: daily news tone history (2017 onwards) and recent article lists (about 3 months); `rolling_tone` for decision dates |
 
 ## Design decisions
 
@@ -38,6 +39,24 @@ print(summary.label, round(summary.score, 2))
 - **Lazy heavy imports.** `transformers` and PyTorch load only when the `finbert` backend is created.
 - **Shared registry.** Backends are registered through `mattslib.Registry`, the same mechanism the
   vision package uses (extracted on its second use, per ADR-0003).
+
+## News history from GDELT
+
+```python
+from datetime import date
+from ailab_nlp import GdeltClient, rolling_tone
+
+gdelt = GdeltClient()                                     # polite: one request per 5 s by default
+daily = gdelt.daily_tone('"Microsoft" sourcelang:english', start=date(2019, 1, 1), end=date.today())
+mood = rolling_tone(daily, as_of=date(2024, 3, 1), window_days=7)   # excludes Mar 1 itself
+recent = gdelt.articles('"Microsoft"', start=date.today().replace(day=1), end=date.today())
+```
+
+- **Two modes, two jobs.** GDELT timelines give years of daily tone for back-testing; article
+  lists cover roughly the last three months and provide text for FinBERT.
+- **Tone scale.** GDELT tone is typically within -10..+10 and is mapped to -1..+1 (`tone_scale=10`).
+- **Same-day news excluded** by default, because a day's bucket can include stories published after
+  the decision time.
 
 ## Install
 
@@ -60,6 +79,7 @@ python packages/nlp/examples/news_sentiment.py headlines.tsv --as-of 2026-11-02
 | Hugging Face `transformers` | FinBERT backend (optional) | Apache-2.0 |
 | PyTorch | FinBERT backend (optional) | BSD-style |
 | `ProsusAI/finbert` model weights | Default FinBERT model | See the model card on Hugging Face before commercial use |
+| GDELT Project data | News tone and article lists | Free and open; see GDELT's terms and cite GDELT when publishing results |
 
 ## Roadmap
 
