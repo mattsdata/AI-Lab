@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ailab-finance"
-version = "1.4.0"
+version = "1.4.1"
 description = "Market analytics and a corporate early warning system (equity outlook + credit risk). Research use only."
 readme = "README.md"
 license = "MIT"
@@ -17,6 +17,7 @@ dependencies = [
   "mattslib @ git+https://github.com/mattsdata/mattslib.git",
   "ailab-ml @ git+https://github.com/mattsdata/ai-lab.git#subdirectory=packages/ml",
   "ailab-nlp @ git+https://github.com/mattsdata/ai-lab.git#subdirectory=packages/nlp",
+  "ailab-timeseries @ git+https://github.com/mattsdata/ai-lab.git#subdirectory=packages/timeseries",
 ]
 
 [project.optional-dependencies]

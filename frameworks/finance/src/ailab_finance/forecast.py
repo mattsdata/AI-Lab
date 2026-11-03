@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/src/ailab_finance/forecast.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.1
+#  Version      : V1.2
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -43,6 +43,9 @@
 #
 #    V1.1 (2026-11-03) - Mathew Varghese
 #      - Logistic solver moved to ailab-ml (shared with the credit scorecard, ADR-0003).
+#
+#    V1.2 (2026-11-03) - Mathew Varghese
+#      - Rolling volatility from ailab-timeseries (shared with the climate framework, ADR-0003).
 # ==================================================================================================
 """Outlook model (market + news sentiment) with purged walk-forward evaluation."""
 
@@ -59,6 +62,7 @@ from typing import Protocol
 import numpy as np
 import numpy.typing as npt
 from ailab_ml import logistic_irls, sigmoid
+from ailab_timeseries import rolling_std
 
 from ailab_finance.outlook import ReturnOutlook
 from ailab_finance.types import PriceSeries
@@ -103,12 +107,14 @@ def market_features(close: npt.ArrayLike) -> FloatArray:
     out = np.full((n, len(MARKET_FEATURES)), np.nan)
     log_ret = np.concatenate([[np.nan], np.diff(np.log(c))])
     annualise = math.sqrt(252)
+    volatility_21 = rolling_std(log_ret, 21) * annualise  # causal windows from ailab-timeseries
+    volatility_63 = rolling_std(log_ret, 63) * annualise
     for i in range(WARMUP, n):
         out[i, 0] = c[i] / c[i - 21] - 1
         out[i, 1] = c[i] / c[i - 63] - 1
         out[i, 2] = c[i] / c[i - 126] - 1
-        out[i, 3] = np.std(log_ret[i - 20 : i + 1], ddof=1) * annualise
-        out[i, 4] = np.std(log_ret[i - 62 : i + 1], ddof=1) * annualise
+        out[i, 3] = volatility_21[i]
+        out[i, 4] = volatility_63[i]
         out[i, 5] = c[i] / np.max(c[i - 251 : i + 1]) - 1
     return out
 
