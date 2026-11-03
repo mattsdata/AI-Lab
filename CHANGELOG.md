@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- `finance` V1.2: SEC EDGAR fundamentals. Ticker to CIK lookup, company facts, point-in-time
+  selection by filing date, KMV default point and shares outstanding with source filings; Early
+  Warning demo uses them via `SEC_USER_AGENT`.
 - `nlp` V1.1: GDELT news connector (daily tone history from 2017, recent article lists) with
   polite rate limiting and retries, and `rolling_tone` that excludes future and same-day news.
   Stock Outlook demo gains `--gdelt QUERY`.

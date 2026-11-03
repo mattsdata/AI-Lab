@@ -1,6 +1,6 @@
 # ailab-finance
 
-*Author: **Mathew Varghese** · Version 1.1 · Research and education only. Not financial advice.*
+*Author: **Mathew Varghese** · Version 1.2 · Research and education only. Not financial advice.*
 
 Market analytics and the foundations of a **Corporate Early Warning System**: for a listed
 company, one view of its **equity outlook** (how its share price could move) and its
@@ -38,6 +38,7 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | `data` | `DataSource` interface, `CsvSource`, `YahooSource` (optional, with retries via `mattslib`) |
 | `metrics` | Returns, annualised volatility, Sharpe, Sortino, max drawdown, historical VaR |
 | `credit` | Naive Merton distance to default (Bharath & Shumway, 2008), GREEN / AMBER / RED flags |
+| `fundamentals` | SEC EDGAR client: point-in-time (by filing date) default point and shares outstanding, with the source filing for every number |
 | `outlook` | Historical baseline: return range and probability of +10% / +25% / +50% over a horizon |
 | `forecast` | Outlook model: causal market + news-sentiment features, ridge + logistic model, purged walk-forward test with Brier skill vs the baseline |
 
@@ -57,6 +58,9 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 - **Market-based credit risk.** Distance to default needs only share prices and debt, not
   default history, which is scarce and usually paid-for. The probability is model-implied, not a
   calibrated real-world PD; banks map distance to default to PD with their own default data.
+- **Fundamentals as they were known.** EDGAR facts are selected by *filing* date, not period end: a
+  31 December balance sheet filed on 20 February is invisible on 10 February. Every number carries
+  its concept, period, form and accession so it can be traced to the filing.
 - **Pandas-free core.** NumPy only, so the framework is light and fully type-checked.
   Shared time-series code will move to a `timeseries` package when a second framework needs it
   ([ADR-0003](../../docs/adr/0003-extract-shared-code-on-second-use.md)).
@@ -69,7 +73,7 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | 2 | `nlp` package: sentiment interface with a FinBERT backend | ✅ (packages/nlp) |
 | 3 | Outlook model: market + news features, walk-forward evaluation, skill vs baseline | ✅ V1.1 |
 | 3b | Historical news archive (e.g. GDELT) so news features cover the full price history | Planned |
-| 4 | Company fundamentals from SEC EDGAR (debt, shares outstanding) | Planned |
+| 4 | Company fundamentals from SEC EDGAR (debt, shares outstanding) | ✅ V1.2 |
 | 5 | Combined early warning report and demo | Planned |
 
 ## Data and licences
@@ -78,6 +82,7 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 |---|---|---|
 | CSV files | Tests, demos, audits | Your own data |
 | yfinance (optional) | Yahoo Finance prices | Unofficial; Yahoo's terms allow personal and research use only |
+| SEC EDGAR | Company filings (XBRL facts) | Public US filings; declare a User-Agent with contact email and stay under 10 requests/second |
 | NumPy | Arrays | BSD-3-Clause |
 | mattslib | Retries, logging | MIT |
 
@@ -90,7 +95,9 @@ pip install -e "frameworks/finance[yahoo,news]"
 python frameworks/finance/examples/stock_outlook.py MSFT
 python frameworks/finance/examples/stock_outlook.py MSFT --headlines msft.tsv --backend finbert
 
-# Corporate Early Warning: equity outlook + credit risk
+# Corporate Early Warning: equity outlook + credit risk (debt and shares from SEC EDGAR)
+export SEC_USER_AGENT="Your Name you@example.com"
+python frameworks/finance/examples/early_warning.py MSFT
 python frameworks/finance/examples/early_warning.py MSFT --debt 6e10 --market-cap 3e12
 ```
 

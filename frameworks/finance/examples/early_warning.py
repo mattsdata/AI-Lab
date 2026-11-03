@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/examples/early_warning.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.0
+#  Version      : V1.1
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -16,20 +16,26 @@
 #    -> distance to default and default probability -> GREEN / AMBER / RED flag
 #
 #  🧠 DESIGN NOTES
-#    - Market cap and debt can be passed explicitly (--market-cap, --debt) so an analyst can
-#      apply their bank's default-point convention; otherwise Yahoo's figures are used and the
-#      report says so.
+#    - Debt and shares come from SEC EDGAR filings when a SEC User-Agent is given (--sec-agent
+#      or the SEC_USER_AGENT environment variable): default point = current liabilities + half
+#      of long-term debt, market cap = shares outstanding x latest price, with the source filings
+#      printed. Otherwise Yahoo's figures are used, or explicit --market-cap / --debt values.
 #    - Research and education only. Not financial advice.
 #
 #  USAGE
 #    pip install -e "frameworks/finance[yahoo]"
 #    python frameworks/finance/examples/early_warning.py MSFT
 #    python frameworks/finance/examples/early_warning.py MSFT --debt 6e10 --market-cap 3e12
+#    export SEC_USER_AGENT="Your Name you@example.com"
+#    python frameworks/finance/examples/early_warning.py MSFT     # debt and shares from EDGAR
 #
 #  📂 VERSION HISTORY
 #
 #    V1.0 (2026-11-03) - Mathew Varghese
 #      - Initial demo: combined equity outlook and credit risk report.
+#
+#    V1.1 (2026-11-03) - Mathew Varghese
+#      - Debt and shares from SEC EDGAR (point in time, with source filings).
 # ==================================================================================================
 """Corporate Early Warning report for one listed company."""
 
@@ -39,6 +45,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 from datetime import date, timedelta
 from typing import Any
 
@@ -47,6 +54,7 @@ from mattslib import setup_logging
 
 from ailab_finance import (
     DISCLAIMER,
+    EdgarClient,
     Instrument,
     YahooSource,
     annualised_volatility,
@@ -67,6 +75,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--years", type=int, default=5, help="years of price history to use")
     parser.add_argument("--market-cap", type=float, help="equity value (default: Yahoo)")
     parser.add_argument("--debt", type=float, help="default point / debt (default: Yahoo)")
+    parser.add_argument(
+        "--sec-agent",
+        default=os.environ.get("SEC_USER_AGENT"),
+        help='SEC User-Agent, e.g. "Your Name you@example.com" (enables EDGAR figures)',
+    )
     return parser.parse_args()
 
 
@@ -98,14 +111,22 @@ def main() -> None:
         f"Max drawdown: {max_drawdown(last_year):.1%}"
     )
 
-    figures = company_figures(args.symbol)
-    market_cap = args.market_cap or figures["market_cap"]
-    debt = args.debt or figures["debt"]
     print("\n-- Credit risk (naive Merton, 1 year) --")
+    market_cap, debt, source = args.market_cap, args.debt, "user input"
+    if args.sec_agent and not (market_cap and debt):
+        inputs = EdgarClient(args.sec_agent).credit_inputs(args.symbol)
+        market_cap = market_cap or inputs.shares_outstanding.value * float(prices.close[-1])
+        debt = debt or inputs.default_point
+        source = "SEC EDGAR: current liabilities + 50% long-term debt"
+        print(inputs.provenance())
+    elif not (market_cap and debt):
+        figures = company_figures(args.symbol)
+        market_cap = market_cap or figures["market_cap"]
+        debt = debt or figures["debt"]
+        source = "Yahoo totalDebt"
     if not market_cap or not debt:
         print("Market cap or debt unavailable; pass --market-cap and --debt.")
     else:
-        source = "user input" if args.debt else "Yahoo totalDebt"
         estimate = naive_distance_to_default(
             equity_value=market_cap,
             debt=debt,

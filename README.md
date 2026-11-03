@@ -38,7 +38,7 @@ plugin registry that every package uses to select backends by name.
 
 | Framework | Domain | Status |
 |---|---|---|
-| [`finance`](frameworks/finance) | Stock Outlook model (market + news sentiment, walk-forward tested) and Corporate Early Warning (credit risk) | 🟡 V1.1 |
+| [`finance`](frameworks/finance) | Stock Outlook model (market + news sentiment, walk-forward tested) and Corporate Early Warning (credit risk from SEC EDGAR filings) | 🟡 V1.2 |
 | `climate` | Station data, anomalies, scenarios | Planned |
 | `mental-health` | Self-tracking and research tools, privacy first | Planned |
 | `heritage` | Sites, sources, evidence with confidence | Planned |
