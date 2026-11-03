@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `speech` package V1.0: SpeechToText / TextToSpeech interfaces on the shared registry, Whisper
+  (faster-whisper, offline) and gTTS engines, word error rate, SRT subtitles, TTS chunking.
 - `heritage` framework V1.0: candidate earthworks from a DEM by outline regularity (raised and
   sunken), evidence records with a conservative status ladder, generalised public locations and
   reporting guidance (India, UK), degradation over 10 / 500 / 1000 years with an uncertainty

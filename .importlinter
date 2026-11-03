@@ -5,6 +5,7 @@ root_packages =
     ailab_ml
     ailab_timeseries
     ailab_geo
+    ailab_speech
     ailab_finance
     ailab_climate
     ailab_mental_health
@@ -19,6 +20,7 @@ source_modules =
     ailab_ml
     ailab_timeseries
     ailab_geo
+    ailab_speech
 forbidden_modules =
     ailab_finance
     ailab_climate
