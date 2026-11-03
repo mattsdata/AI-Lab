@@ -8,6 +8,7 @@ root_packages =
     ailab_finance
     ailab_climate
     ailab_mental_health
+    ailab_heritage
 
 [importlinter:contract:packages-do-not-import-frameworks]
 name = Packages must never import frameworks (ADR-0001)
@@ -22,6 +23,7 @@ forbidden_modules =
     ailab_finance
     ailab_climate
     ailab_mental_health
+    ailab_heritage
 
 [importlinter:contract:frameworks-are-independent]
 name = Frameworks must not import each other
@@ -30,3 +32,4 @@ modules =
     ailab_finance
     ailab_climate
     ailab_mental_health
+    ailab_heritage

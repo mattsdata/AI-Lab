@@ -20,6 +20,6 @@ jobs:
         # the same packages referenced by Git URL in framework dependencies.
         run: |
           pip install import-linter
-          pip install --no-deps -e packages/vision -e packages/nlp -e packages/ml -e packages/timeseries -e packages/geo -e frameworks/finance -e frameworks/climate -e frameworks/mental-health
+          pip install --no-deps -e packages/vision -e packages/nlp -e packages/ml -e packages/timeseries -e packages/geo -e frameworks/finance -e frameworks/climate -e frameworks/mental-health -e frameworks/heritage
       - name: Check import contracts
         run: lint-imports

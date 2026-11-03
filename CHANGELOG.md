@@ -3,6 +3,10 @@
 ## [Unreleased]
 
 ### Added
+- `heritage` framework V1.0: candidate earthworks from a DEM by outline regularity (raised and
+  sunken), evidence records with a conservative status ladder, generalised public locations and
+  reporting guidance (India, UK), degradation over 10 / 500 / 1000 years with an uncertainty
+  range; demo. ADR-0007.
 - `geo` package V1.0: GeoGrid and GeoTIFF reading, slope / aspect / hillshade, Local Relief
   Model, hillslope diffusion (erosion over centuries), region labelling with shape measures.
 - `mental-health` framework V1.0: PHQ-9 / GAD-7 scoring with published cut-offs and a
