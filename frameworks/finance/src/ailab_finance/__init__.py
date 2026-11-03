@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/src/ailab_finance/__init__.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.1
+#  Version      : V1.2
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -21,6 +21,9 @@
 #
 #    V1.1 (2026-11-03) - Mathew Varghese
 #      - Added the outlook model: market + news features, purged walk-forward evaluation.
+#
+#    V1.2 (2026-11-03) - Mathew Varghese
+#      - Added SEC EDGAR fundamentals: point-in-time credit inputs with provenance.
 # ==================================================================================================
 """ailab-finance: market analytics and corporate early warning (research use only)."""
 
@@ -39,6 +42,7 @@ from ailab_finance.forecast import (
     model_outlook,
     walk_forward,
 )
+from ailab_finance.fundamentals import CreditInputs, EdgarClient, Fact, latest_fact
 from ailab_finance.metrics import (
     annualised_volatility,
     forward_returns,
@@ -55,7 +59,7 @@ from ailab_finance.types import Instrument, Money, PriceSeries
 # ========================================
 # 📂 Package Metadata
 # ========================================
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 __author__ = "Mathew Varghese"
 
 # ========================================
@@ -63,9 +67,12 @@ __author__ = "Mathew Varghese"
 # ========================================
 __all__ = [
     "DISCLAIMER",
+    "CreditInputs",
     "CsvSource",
     "DataSource",
     "DefaultEstimate",
+    "EdgarClient",
+    "Fact",
     "FeatureSet",
     "Instrument",
     "Money",
@@ -81,6 +88,7 @@ __all__ = [
     "forward_returns",
     "historical_outlook",
     "historical_var",
+    "latest_fact",
     "log_returns",
     "max_drawdown",
     "model_outlook",
