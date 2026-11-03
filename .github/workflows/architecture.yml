@@ -16,6 +16,6 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install packages and frameworks
-        run: pip install import-linter -e packages/vision -e frameworks/finance
+        run: pip install import-linter -e packages/vision -e packages/nlp -e frameworks/finance
       - name: Check import contracts
         run: lint-imports

@@ -27,3 +27,10 @@ real uses. The candidates are marked in module docstrings.
 - One extraction refactor per shared capability. Tests in the first framework protect it.
 - The dependency rule (packages never import frameworks) still holds throughout, because
   code moves *down* into packages, never up.
+
+## Applications
+
+- **2026-11-03: plugin registry.** First written in `vision`. When `nlp` needed the same
+  mechanism, it was extracted into `mattslib.Registry` (mattslib 1.1.0) and both packages
+  now use it. The extraction also fixed a bug: a backend option called `name` clashed with
+  the registry's own `name` argument.

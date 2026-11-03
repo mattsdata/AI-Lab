@@ -23,14 +23,15 @@ enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-laye
 
 | Package | Scope | Status |
 |---|---|---|
-| [`vision`](packages/vision) | Object detection, tracking, video I/O | ✅ V1.0 |
-| `nlp` | LLM backend interface, RAG, evaluation | Planned |
+| [`vision`](packages/vision) | Object detection, tracking, video I/O | ✅ V1.1 |
+| [`nlp`](packages/nlp) | Sentiment (lexicon baseline, FinBERT), time-weighted aggregation. Next: LLM backends, RAG | ✅ V1.0 |
 | `timeseries` | Forecasting, anomaly detection | Planned |
 | `speech` | Speech-to-text, text-to-speech | Planned |
 | `geo` | Raster, terrain and map utilities | Planned |
 | `ml-core` | Training loop, metrics, seed control | Planned |
 
-The core utilities live in [`mattslib`](https://github.com/mattsdata/mattslib).
+The core utilities live in [`mattslib`](https://github.com/mattsdata/mattslib), including the
+plugin registry that every package uses to select backends by name.
 
 ## Frameworks
 

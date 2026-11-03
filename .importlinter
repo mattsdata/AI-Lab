@@ -1,6 +1,7 @@
 [importlinter]
 root_packages =
     ailab_vision
+    ailab_nlp
     ailab_finance
 
 [importlinter:contract:packages-do-not-import-frameworks]
@@ -8,6 +9,7 @@ name = Packages must never import frameworks (ADR-0001)
 type = forbidden
 source_modules =
     ailab_vision
+    ailab_nlp
 forbidden_modules =
     ailab_finance
 
