@@ -18,6 +18,7 @@ enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-laye
 | [0001](docs/adr/0001-layered-architecture.md) | Two layers: packages and frameworks, one-way dependencies |
 | [0002](docs/adr/0002-decimal-money-float-analytics.md) | Decimal for money, float64 for analytics |
 | [0003](docs/adr/0003-extract-shared-code-on-second-use.md) | Extract shared code into a package on its second use |
+| [0004](docs/adr/0004-purged-walk-forward-against-a-baseline.md) | Judge forecasting models by purged walk-forward tests against a baseline |
 
 ## Packages
 
@@ -37,7 +38,7 @@ plugin registry that every package uses to select backends by name.
 
 | Framework | Domain | Status |
 |---|---|---|
-| [`finance`](frameworks/finance) | Market analytics and Corporate Early Warning (equity outlook + credit risk) | 🟡 V1.0 foundations |
+| [`finance`](frameworks/finance) | Stock Outlook model (market + news sentiment, walk-forward tested) and Corporate Early Warning (credit risk) | 🟡 V1.1 |
 | `climate` | Station data, anomalies, scenarios | Planned |
 | `mental-health` | Self-tracking and research tools, privacy first | Planned |
 | `heritage` | Sites, sources, evidence with confidence | Planned |

@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- `finance` V1.1: Stock Outlook model. Causal market and news-sentiment features, ridge +
+  logistic model with base-rate fallback for rare events, purged walk-forward test with Brier
+  skill vs the historical baseline, `model_outlook`, demo. ADR-0004.
 - `nlp` package V1.0: SentimentResult and analyzer interface, lexicon baseline with negation,
   FinBERT backend, time-decay aggregation with a look-ahead guard, demo, CI.
 - `finance` framework V1.0 foundations: Instrument, PriceSeries (look-ahead guard), exact
