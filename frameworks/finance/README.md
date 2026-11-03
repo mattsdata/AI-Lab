@@ -1,6 +1,6 @@
 # ailab-finance
 
-*Author: **Mathew Varghese** · Version 1.2 · Research and education only. Not financial advice.*
+*Author: **Mathew Varghese** · Version 1.3 · Research and education only. Not financial advice.*
 
 Market analytics and the foundations of a **Corporate Early Warning System**: for a listed
 company, one view of its **equity outlook** (how its share price could move) and its
@@ -38,6 +38,7 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | `data` | `DataSource` interface, `CsvSource`, `YahooSource` (optional, with retries via `mattslib`) |
 | `metrics` | Returns, annualised volatility, Sharpe, Sortino, max drawdown, historical VaR |
 | `credit` | Naive Merton distance to default (Bharath & Shumway, 2008), GREEN / AMBER / RED flags |
+| `scorecard` | Credit scorecard: WoE binning with missing-value bins, IV-based selection, points (600 at 50:1, PDO 20), reason codes, validation pack (AUC, Gini, KS, calibration, PSI), group fairness check |
 | `fundamentals` | SEC EDGAR client: point-in-time (by filing date) default point and shares outstanding, with the source filing for every number |
 | `outlook` | Historical baseline: return range and probability of +10% / +25% / +50% over a horizon |
 | `forecast` | Outlook model: causal market + news-sentiment features, ridge + logistic model, purged walk-forward test with Brier skill vs the baseline |
@@ -61,6 +62,10 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 - **Fundamentals as they were known.** EDGAR facts are selected by *filing* date, not period end: a
   31 December balance sheet filed on 20 February is invisible on 10 February. Every number carries
   its concept, period, form and accession so it can be traced to the filing.
+- **Scorecards a regulator can read.** Points are additive per characteristic and every decision
+  comes with reason codes. Protected characteristics are never model inputs; they are used only
+  afterwards to check approval rates across groups (adverse impact ratio). Tests document that
+  Information Value is biased upward in small samples (pure noise reached 0.09 on 500 rows).
 - **Pandas-free core.** NumPy only, so the framework is light and fully type-checked.
   Shared time-series code will move to a `timeseries` package when a second framework needs it
   ([ADR-0003](../../docs/adr/0003-extract-shared-code-on-second-use.md)).
@@ -74,7 +79,8 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | 3 | Outlook model: market + news features, walk-forward evaluation, skill vs baseline | ✅ V1.1 |
 | 3b | Historical news archive (e.g. GDELT) so news features cover the full price history | Planned |
 | 4 | Company fundamentals from SEC EDGAR (debt, shares outstanding) | ✅ V1.2 |
-| 5 | Combined early warning report and demo | Planned |
+| 5 | Combined early warning report and demo | ✅ V1.2 |
+| 6 | Credit risk scorecard with validation and fairness check | ✅ V1.3 |
 
 ## Data and licences
 
@@ -84,7 +90,8 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | yfinance (optional) | Yahoo Finance prices | Unofficial; Yahoo's terms allow personal and research use only |
 | SEC EDGAR | Company filings (XBRL facts) | Public US filings; declare a User-Agent with contact email and stay under 10 requests/second |
 | NumPy | Arrays | BSD-3-Clause |
-| mattslib | Retries, logging | MIT |
+| mattslib | Retries, logging, plugin registry | MIT |
+| ailab-ml | Logistic regression, validation metrics | MIT |
 
 ## Examples
 
@@ -94,6 +101,9 @@ pip install -e "frameworks/finance[yahoo,news]"
 # Scenario 1: Stock Outlook (baseline vs model, with walk-forward evidence)
 python frameworks/finance/examples/stock_outlook.py MSFT
 python frameworks/finance/examples/stock_outlook.py MSFT --headlines msft.tsv --backend finbert
+
+# Credit scorecard: build, validate, explain, fairness check (synthetic book, runs offline)
+python frameworks/finance/examples/credit_scorecard.py
 
 # Corporate Early Warning: equity outlook + credit risk (debt and shares from SEC EDGAR)
 export SEC_USER_AGENT="Your Name you@example.com"

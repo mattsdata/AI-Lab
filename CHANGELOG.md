@@ -3,6 +3,10 @@
 ## [Unreleased]
 
 ### Added
+- `ml` package V1.0: logistic regression (IRLS) and validation metrics (AUC, Gini, KS, Brier,
+  calibration table, PSI), extracted from finance on second use (ADR-0003).
+- `finance` V1.3: credit scorecard with WoE binning, IV selection, points scaling, reason codes,
+  validation pack and group fairness check; offline demo.
 - `finance` V1.2: SEC EDGAR fundamentals. Ticker to CIK lookup, company facts, point-in-time
   selection by filing date, KMV default point and shares outstanding with source filings; Early
   Warning demo uses them via `SEC_USER_AGENT`.
@@ -24,5 +28,6 @@
 - Repository structure, layered-architecture ADR and licence.
 
 ### Changed
+- `finance` forecast now uses `ailab-ml` for its logistic models (behaviour unchanged).
 - `vision` V1.1: backend registry now provided by `mattslib.Registry` (ADR-0003 applied: the
   registry was extracted when `nlp` became its second user). Backend options may now be named `name`.

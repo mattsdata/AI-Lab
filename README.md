@@ -29,7 +29,7 @@ enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-laye
 | `timeseries` | Forecasting, anomaly detection | Planned |
 | `speech` | Speech-to-text, text-to-speech | Planned |
 | `geo` | Raster, terrain and map utilities | Planned |
-| `ml-core` | Training loop, metrics, seed control | Planned |
+| [`ml`](packages/ml) | Explainable models (logistic regression) and validation metrics: AUC, Gini, KS, Brier, calibration, PSI | ✅ V1.0 |
 
 The core utilities live in [`mattslib`](https://github.com/mattsdata/mattslib), including the
 plugin registry that every package uses to select backends by name.
@@ -38,7 +38,7 @@ plugin registry that every package uses to select backends by name.
 
 | Framework | Domain | Status |
 |---|---|---|
-| [`finance`](frameworks/finance) | Stock Outlook model (market + news sentiment, walk-forward tested) and Corporate Early Warning (credit risk from SEC EDGAR filings) | 🟡 V1.2 |
+| [`finance`](frameworks/finance) | Stock Outlook model (market + news, walk-forward tested), Corporate Early Warning (Merton + SEC EDGAR), Credit Scorecard (WoE, points, reason codes, validation, fairness) | ✅ V1.3 |
 | `climate` | Station data, anomalies, scenarios | Planned |
 | `mental-health` | Self-tracking and research tools, privacy first | Planned |
 | `heritage` | Sites, sources, evidence with confidence | Planned |

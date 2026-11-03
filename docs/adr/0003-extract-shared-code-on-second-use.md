@@ -34,3 +34,7 @@ real uses. The candidates are marked in module docstrings.
   mechanism, it was extracted into `mattslib.Registry` (mattslib 1.1.0) and both packages
   now use it. The extraction also fixed a bug: a backend option called `name` clashed with
   the registry's own `name` argument.
+- **2026-11-03: logistic regression and validation metrics.** First written inside the finance
+  outlook model. When the credit scorecard needed the same solver and model-validation metrics,
+  they moved into the new `ml` package (`ailab-ml`). The outlook model's tests, including its
+  walk-forward skill tests, passed unchanged after the move.
