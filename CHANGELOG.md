@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Added
+- `geo` package V1.0: GeoGrid and GeoTIFF reading, slope / aspect / hillshade, Local Relief
+  Model, hillslope diffusion (erosion over centuries), region labelling with shape measures.
 - `mental-health` framework V1.0: PHQ-9 / GAD-7 scoring with published cut-offs and a
   safety alert on PHQ-9 item 9, regional crisis contacts, crisis-language safety net, Fernet-
   encrypted local journal, non-diagnostic weekly summaries; CLI demo. ADR-0006.
