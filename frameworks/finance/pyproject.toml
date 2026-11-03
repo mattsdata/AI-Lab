@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ailab-finance"
-version = "1.0.0"
+version = "1.1.0"
 description = "Market analytics and a corporate early warning system (equity outlook + credit risk). Research use only."
 readme = "README.md"
 license = "MIT"
@@ -19,6 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 yahoo = ["yfinance>=0.2.40"]
+news = ["ailab-nlp @ git+https://github.com/mattsdata/ai-lab.git#subdirectory=packages/nlp"]
 dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10"]
 
 [tool.hatch.metadata]
