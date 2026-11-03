@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/src/ailab_finance/forecast.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.0
+#  Version      : V1.1
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -40,6 +40,9 @@
 #
 #    V1.0 (2026-11-03) - Mathew Varghese
 #      - Initial release: features, OutlookModel, purged walk-forward, model_outlook.
+#
+#    V1.1 (2026-11-03) - Mathew Varghese
+#      - Logistic solver moved to ailab-ml (shared with the credit scorecard, ADR-0003).
 # ==================================================================================================
 """Outlook model (market + news sentiment) with purged walk-forward evaluation."""
 
@@ -55,6 +58,7 @@ from typing import Protocol
 
 import numpy as np
 import numpy.typing as npt
+from ailab_ml import logistic_irls, sigmoid
 
 from ailab_finance.outlook import ReturnOutlook
 from ailab_finance.types import PriceSeries
@@ -157,27 +161,6 @@ class Prediction:
     modelled: dict[float, bool]  # False: too few past events, smoothed base rate used instead
 
 
-def _sigmoid(z: FloatArray) -> FloatArray:
-    out: FloatArray = 1.0 / (1.0 + np.exp(-np.clip(z, -30.0, 30.0)))
-    return out
-
-
-def _logistic_irls(design: FloatArray, events: FloatArray, l2: float) -> FloatArray:
-    """L2-regularised logistic regression by Newton's method (IRLS); intercept unpenalised."""
-    weights = np.zeros(design.shape[1])
-    penalty = np.full(design.shape[1], l2)
-    penalty[0] = 0.0
-    for _ in range(50):
-        p = _sigmoid(design @ weights)
-        hessian = (design.T * (p * (1 - p))) @ design + np.diag(penalty + 1e-9)
-        gradient = design.T @ (events - p) - penalty * weights
-        step = np.linalg.solve(hessian, gradient)
-        weights += step
-        if np.max(np.abs(step)) < 1e-8:
-            break
-    return weights
-
-
 class OutlookModel:
     """Ridge for the central return, residual quantiles for the range, logistic per threshold."""
 
@@ -230,7 +213,7 @@ class OutlookModel:
             k = float(events.sum())
             self._base_rates[t] = (k + 0.5) / (n + 1)  # smoothed: never exactly 0 or 1
             if k >= self._min_events and n - k >= self._min_events:
-                self._classifiers[t] = _logistic_irls(design, events, self._l2)
+                self._classifiers[t] = logistic_irls(design, events, l2=self._l2)
         self._fitted = True
         return self
 
@@ -247,7 +230,7 @@ class OutlookModel:
         ceiling = 1.0
         for t in self.thresholds:  # ascending, so each target is capped by the easier one
             if t in self._classifiers:
-                p = float(_sigmoid(design @ self._classifiers[t])[0])
+                p = float(sigmoid(design @ self._classifiers[t])[0])
             else:
                 p = self._base_rates[t]
             probabilities[t] = min(p, ceiling)
