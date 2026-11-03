@@ -20,6 +20,7 @@ enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-laye
 | [0003](docs/adr/0003-extract-shared-code-on-second-use.md) | Extract shared code into a package on its second use |
 | [0004](docs/adr/0004-purged-walk-forward-against-a-baseline.md) | Judge forecasting models by purged walk-forward tests against a baseline |
 | [0005](docs/adr/0005-rag-answers-cite-or-abstain.md) | RAG answers must cite verifiable sources or abstain |
+| [0006](docs/adr/0006-wellbeing-tools-safety-first-non-diagnostic.md) | Wellbeing tools are safety-first, private and non-diagnostic |
 
 ## Packages
 
@@ -41,7 +42,7 @@ plugin registry that every package uses to select backends by name.
 |---|---|---|
 | [`finance`](frameworks/finance) | Stock Outlook model (market + news, walk-forward tested), Corporate Early Warning (Merton + SEC EDGAR), Credit Scorecard (WoE, points, reason codes, validation, fairness), Annual Report Analyser (RAG over 10-Ks) | ✅ V1.4 |
 | [`climate`](frameworks/climate) | Local climate change for any place: Open-Meteo (ERA5) and NASA GISTEMP data, six ETCCDI-style indices, trends with honest uncertainty; Kollam demo | ✅ V1.0 |
-| `mental-health` | Self-tracking and research tools, privacy first | Planned |
+| [`mental-health`](frameworks/mental-health) | Private, safety-first, non-diagnostic: PHQ-9 / GAD-7 scoring with safety alerts, crisis contacts, encrypted journal, gentle summaries | ✅ V1.0 |
 | `heritage` | Sites, sources, evidence with confidence | Planned |
 
 ## Principles

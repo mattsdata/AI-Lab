@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- `mental-health` framework V1.0: PHQ-9 / GAD-7 scoring with published cut-offs and a
+  safety alert on PHQ-9 item 9, regional crisis contacts, crisis-language safety net, Fernet-
+  encrypted local journal, non-diagnostic weekly summaries; CLI demo. ADR-0006.
 - `climate` framework V1.0: Open-Meteo (ERA5) daily history and NASA GISTEMP clients, six
   annual indices (mean temperature, hot days, warm nights, rainfall, heavy rain days, wettest
   day), place report with trends per decade, 95% intervals, plain verdicts and global context;
