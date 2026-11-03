@@ -117,7 +117,11 @@ class PriceSeries:
 
     def until(self, as_of: str | np.datetime64) -> PriceSeries:
         """The series as known on ``as_of`` (inclusive): the look-ahead guard."""
-        mask = self.dates <= np.datetime64(as_of, "D")
+        # Narrow the union first: NumPy's type stubs differ across versions for mixed input.
+        cutoff = (
+            np.datetime64(as_of, "D") if isinstance(as_of, str) else as_of.astype("datetime64[D]")
+        )
+        mask = self.dates <= cutoff
         return PriceSeries(self.instrument, self.dates[mask], self.close[mask])
 
     def between(self, start: str | None = None, end: str | None = None) -> PriceSeries:
