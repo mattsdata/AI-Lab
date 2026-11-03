@@ -1,0 +1,49 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ailab-vision"
+version = "1.0.0"
+description = "Model-independent object detection and tracking: one interface, pluggable backends (YOLO included)."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
+keywords = ["computer-vision", "object-detection", "tracking", "yolo"]
+classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+yolo = ["ultralytics>=8.3"]
+video = ["opencv-python-headless>=4.8"]
+examples = [
+  "ailab-vision[yolo,video]",
+  "mattslib @ git+https://github.com/mattsdata/mattslib.git",
+]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10", "opencv-python-headless>=4.8"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ailab_vision"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+strict = true
+python_version = "3.10"
+
+[[tool.mypy.overrides]]
+module = ["ultralytics.*", "cv2.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]
+addopts = "--doctest-modules --cov=ailab_vision --cov-report=term-missing --cov-fail-under=90"
