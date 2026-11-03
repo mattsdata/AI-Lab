@@ -27,7 +27,7 @@ enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-laye
 |---|---|---|
 | [`vision`](packages/vision) | Object detection, tracking, video I/O | ✅ V1.1 |
 | [`nlp`](packages/nlp) | Sentiment (lexicon, FinBERT), GDELT news, RAG (BM25 / embeddings / hybrid, LLM backends, verified citations, evaluation) | ✅ V1.2 |
-| `timeseries` | Forecasting, anomaly detection | Planned |
+| [`timeseries`](packages/timeseries) | Causal rolling statistics, coverage-aware aggregation, autocorrelation-aware trends, seasonal anomalies and thresholds | ✅ V1.0 |
 | `speech` | Speech-to-text, text-to-speech | Planned |
 | `geo` | Raster, terrain and map utilities | Planned |
 | [`ml`](packages/ml) | Explainable models (logistic regression) and validation metrics: AUC, Gini, KS, Brier, calibration, PSI | ✅ V1.0 |

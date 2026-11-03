@@ -38,3 +38,7 @@ real uses. The candidates are marked in module docstrings.
   outlook model. When the credit scorecard needed the same solver and model-validation metrics,
   they moved into the new `ml` package (`ailab-ml`). The outlook model's tests, including its
   walk-forward skill tests, passed unchanged after the move.
+- **2026-11-03: rolling statistics.** First written inside the finance market features. When the
+  climate framework needed causal rolling windows, they moved into the new `timeseries` package
+  together with aggregation, trend and seasonal tools. Finance features were verified to be
+  numerically identical before and after the move.

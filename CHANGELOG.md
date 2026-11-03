@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- `timeseries` package V1.0: causal rolling mean/std, calendar aggregation with a coverage
+  rule, linear trend with autocorrelation-adjusted confidence interval (Monte Carlo tested),
+  calendar-day climatology, anomalies and threshold flags. Extracted on second use (ADR-0003).
 - `nlp` V1.2: RAG stack. Traceable chunking, HTML to text, BM25 / embedding / hybrid (RRF)
   retrieval, `LanguageModel` interface with Ollama and OpenAI-compatible backends, `RagPipeline`
   with verified citations and abstention, extractive baseline, `evaluate_rag`. ADR-0005.
@@ -33,6 +36,7 @@
 - Repository structure, layered-architecture ADR and licence.
 
 ### Changed
+- `finance` 1.4.1: rolling volatility features use `ailab-timeseries` (output verified identical).
 - `finance` forecast now uses `ailab-ml` for its logistic models (behaviour unchanged).
 - `vision` V1.1: backend registry now provided by `mattslib.Registry` (ADR-0003 applied: the
   registry was extracted when `nlp` became its second user). Backend options may now be named `name`.

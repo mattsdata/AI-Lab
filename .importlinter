@@ -3,6 +3,7 @@ root_packages =
     ailab_vision
     ailab_nlp
     ailab_ml
+    ailab_timeseries
     ailab_finance
 
 [importlinter:contract:packages-do-not-import-frameworks]
@@ -12,6 +13,7 @@ source_modules =
     ailab_vision
     ailab_nlp
     ailab_ml
+    ailab_timeseries
 forbidden_modules =
     ailab_finance
 
