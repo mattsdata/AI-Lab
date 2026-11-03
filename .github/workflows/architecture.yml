@@ -16,6 +16,10 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install packages and frameworks
-        run: pip install import-linter -e packages/vision -e packages/nlp -e packages/ml -e frameworks/finance
+        # --no-deps: import-linter only reads the source; local packages must not clash with
+        # the same packages referenced by Git URL in framework dependencies.
+        run: |
+          pip install import-linter
+          pip install --no-deps -e packages/vision -e packages/nlp -e packages/ml -e frameworks/finance
       - name: Check import contracts
         run: lint-imports
