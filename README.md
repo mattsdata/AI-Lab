@@ -8,8 +8,16 @@ the same building blocks can serve any industry.
 - **Packages** are horizontal: they solve one technical problem and know nothing about any domain.
 - **Frameworks** are vertical: they combine packages with domain concepts for one field.
 
-Packages never import frameworks. This rule is enforced in CI and explained in
-[ADR-0001](docs/adr/0001-layered-architecture.md).
+Packages never import frameworks, and frameworks never import each other. These rules are
+enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-layered-architecture.md).
+
+## Architecture decisions
+
+| ADR | Decision |
+|---|---|
+| [0001](docs/adr/0001-layered-architecture.md) | Two layers: packages and frameworks, one-way dependencies |
+| [0002](docs/adr/0002-decimal-money-float-analytics.md) | Decimal for money, float64 for analytics |
+| [0003](docs/adr/0003-extract-shared-code-on-second-use.md) | Extract shared code into a package on its second use |
 
 ## Packages
 
@@ -24,11 +32,11 @@ Packages never import frameworks. This rule is enforced in CI and explained in
 
 The core utilities live in [`mattslib`](https://github.com/mattsdata/mattslib).
 
-## Frameworks (planned)
+## Frameworks
 
 | Framework | Domain | Status |
 |---|---|---|
-| `finance` | Instruments, portfolios, backtesting, risk | Planned |
+| [`finance`](frameworks/finance) | Market analytics and Corporate Early Warning (equity outlook + credit risk) | 🟡 V1.0 foundations |
 | `climate` | Station data, anomalies, scenarios | Planned |
 | `mental-health` | Self-tracking and research tools, privacy first | Planned |
 | `heritage` | Sites, sources, evidence with confidence | Planned |
