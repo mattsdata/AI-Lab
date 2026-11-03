@@ -4,7 +4,7 @@
 #  File         : frameworks/finance/examples/stock_outlook.py
 #  Author       : Mathew Varghese <removed@example.invalid>
 #  Created      : 2026-11-03
-#  Version      : V1.0
+#  Version      : V1.1
 #  License      : MIT (see LICENSE)
 # --------------------------------------------------------------------------------------------------
 #  🎯 PURPOSE
@@ -13,25 +13,31 @@
 #    whether the model is actually better than history.
 #
 #  🔧 WHAT IT DOES
-#    prices (Yahoo) + optional dated headlines (TSV) scored by ailab-nlp
+#    prices (Yahoo) + optional news: GDELT daily tone history, or dated headlines (TSV)
+#    scored by ailab-nlp
 #    -> baseline outlook -> model outlook -> purged walk-forward report
 #
 #  🧠 DESIGN NOTES
 #    - Headlines are scored once, then each decision date sees only headlines published on or
 #      before it, weighted by age (half-life). This is where finance meets the nlp package.
-#    - For a meaningful news effect, the headline file must cover the whole price history
-#      (e.g. from a news archive such as GDELT). Days without headlines count as "no news".
+#    - For a meaningful news effect, news must cover the whole price history. --gdelt fetches
+#      GDELT's daily tone from 2017 onwards; a headline file must span the period itself.
+#      Days without coverage count as "no news".
 #    - Research and education only. Not financial advice.
 #
 #  USAGE
 #    pip install -e "frameworks/finance[yahoo,news]"
 #    python frameworks/finance/examples/stock_outlook.py MSFT
+#    python frameworks/finance/examples/stock_outlook.py MSFT --gdelt '"Microsoft"'
 #    python frameworks/finance/examples/stock_outlook.py MSFT --headlines msft.tsv --backend finbert
 #
 #  📂 VERSION HISTORY
 #
 #    V1.0 (2026-11-03) - Mathew Varghese
 #      - Initial demo: baseline vs model outlook with walk-forward evidence.
+#
+#    V1.1 (2026-11-03) - Mathew Varghese
+#      - Added --gdelt: years of daily news tone from GDELT as the sentiment input.
 # ==================================================================================================
 """Stock Outlook: baseline vs model, with walk-forward evidence."""
 
@@ -46,7 +52,15 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-from ailab_nlp import SentimentSummary, aggregate_sentiment, create_analyzer, time_decay_weights
+from ailab_nlp import (
+    GdeltClient,
+    SentimentSummary,
+    ToneSummary,
+    aggregate_sentiment,
+    create_analyzer,
+    rolling_tone,
+    time_decay_weights,
+)
 
 from ailab_finance import (
     Instrument,
@@ -80,6 +94,17 @@ def news_provider(path: Path, backend: str, half_life: float, window_days: int =
     return provider
 
 
+def gdelt_provider(query: str, start: date) -> Any:
+    """Fetch GDELT daily tone once; return a function giving the 7-day mood before a date."""
+    daily = GdeltClient().daily_tone(query, start=start, end=date.today())
+    print(f"GDELT: {len(daily)} days of news tone for {query!r}")
+
+    def provider(day: np.datetime64) -> ToneSummary:
+        return rolling_tone(daily, as_of=np.datetime64(day, "D").astype(date), window_days=7)
+
+    return provider
+
+
 # ========================================
 # 📂 Report
 # ========================================
@@ -87,6 +112,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("symbol")
     parser.add_argument("--years", type=int, default=6)
+    parser.add_argument("--gdelt", metavar="QUERY", help="use GDELT news tone for this query")
     parser.add_argument("--headlines", type=Path, help="TSV: YYYY-MM-DD<TAB>headline")
     parser.add_argument("--backend", default="lexicon", help="lexicon or finbert")
     parser.add_argument("--half-life", type=float, default=7.0)
@@ -94,9 +120,11 @@ def main() -> None:
 
     start = (date.today() - timedelta(days=365 * args.years)).isoformat()
     prices = YahooSource().load(Instrument(args.symbol), start=start)
-    sentiment = (
-        news_provider(args.headlines, args.backend, args.half_life) if args.headlines else None
-    )
+    sentiment = None
+    if args.gdelt:
+        sentiment = gdelt_provider(args.gdelt, date.fromisoformat(start))
+    elif args.headlines:
+        sentiment = news_provider(args.headlines, args.backend, args.half_life)
 
     print("\n=== 1. Historical baseline ===")
     print(historical_outlook(prices).summary())

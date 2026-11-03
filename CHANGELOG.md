@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Added
+- `nlp` V1.1: GDELT news connector (daily tone history from 2017, recent article lists) with
+  polite rate limiting and retries, and `rolling_tone` that excludes future and same-day news.
+  Stock Outlook demo gains `--gdelt QUERY`.
 - `finance` V1.1: Stock Outlook model. Causal market and news-sentiment features, ridge +
   logistic model with base-rate fallback for rare events, purged walk-forward test with Brier
   skill vs the historical baseline, `model_outlook`, demo. ADR-0004.
