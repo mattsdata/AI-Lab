@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ailab-nlp"
-version = "1.1.0"
+version = "1.2.0"
 description = "Model-independent NLP components: sentiment analysis with lexicon and FinBERT backends, time-weighted aggregation."
 readme = "README.md"
 license = "MIT"
@@ -13,6 +13,7 @@ authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
 keywords = ["nlp", "sentiment", "finbert", "transformers"]
 classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
 dependencies = [
+  "numpy>=1.24",
   "mattslib @ git+https://github.com/mattsdata/mattslib.git",
 ]
 
@@ -36,6 +37,7 @@ select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
 [tool.ruff.lint.per-file-ignores]
 # Word lists read better as space-separated strings than as 30-item list literals.
 "src/ailab_nlp/backends/lexicon.py" = ["SIM905"]
+"src/ailab_nlp/retrieval.py" = ["SIM905"]
 
 [tool.mypy]
 strict = true

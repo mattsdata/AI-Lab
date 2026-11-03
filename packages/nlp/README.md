@@ -1,10 +1,11 @@
 # ailab-nlp
 
-*Author: **Mathew Varghese** · Version 1.1*
+*Author: **Mathew Varghese** · Version 1.2*
 
 Model-independent language components for any AI Lab framework. It provides
 **sentiment analysis** (one interface, a transparent baseline, a financial transformer model,
-time-weighted aggregation) and **news data** from the GDELT Project with look-ahead-safe rolling tone.
+time-weighted aggregation) **news data** from the GDELT Project with look-ahead-safe rolling tone, and **retrieval-augmented
+generation (RAG)** with verified citations, honest abstention and an evaluation harness.
 
 ```python
 from ailab_nlp import aggregate_sentiment, create_analyzer, time_decay_weights
@@ -28,6 +29,11 @@ print(summary.label, round(summary.score, 2))
 | `backends/lexicon` | Word-list baseline with negation handling and smoothing. Dependency-free and explainable |
 | `backends/finbert` | FinBERT via Hugging Face `transformers`; understands financial phrasing |
 | `aggregate` | Exponential time-decay weights; weighted summary with label shares |
+| `documents` | Traceable chunking (exact character offsets), HTML to text |
+| `retrieval` | BM25, embedding (any embed function) and hybrid retrieval with Reciprocal Rank Fusion |
+| `llm` | One `LanguageModel` interface; backends: local Ollama, any OpenAI-compatible API |
+| `rag` | `RagPipeline`: retrieve, answer from numbered sources, verify citations, abstain with NOT FOUND; LLM and extractive answerers |
+| `evaluation` | `evaluate_rag`: hit rate, MRR, citation precision, abstention accuracy, groundedness, term coverage, per-question failures |
 | `news` | `GdeltClient`: daily news tone history (2017 onwards) and recent article lists (about 3 months); `rolling_tone` for decision dates |
 
 ## Design decisions
@@ -39,6 +45,41 @@ print(summary.label, round(summary.score, 2))
 - **Lazy heavy imports.** `transformers` and PyTorch load only when the `finbert` backend is created.
 - **Shared registry.** Backends are registered through `mattslib.Registry`, the same mechanism the
   vision package uses (extracted on its second use, per ADR-0003).
+
+## RAG with citations
+
+```python
+from ailab_nlp import (
+    Bm25Retriever,
+    EvalCase,
+    LlmAnswerer,
+    RagPipeline,
+    chunk_text,
+    create_llm,
+    evaluate_rag,
+)
+
+chunks = chunk_text(report_text, "acme-10k", max_chars=1500, overlap=200)
+rag = RagPipeline(Bm25Retriever(chunks), LlmAnswerer(create_llm("ollama", model="llama3.1")))
+answer = rag.ask("How much long-term debt does the company have?")
+print(answer.text, answer.citations, answer.grounded)
+
+report = evaluate_rag(
+    rag,
+    [
+        EvalCase("How much long-term debt?", evidence="long-term debt", expected_terms=("2031",)),
+        EvalCase("What is the dividend policy?", answerable=False),  # must say NOT FOUND
+    ],
+)
+print(report.summary())
+```
+
+- **Cite or abstain** ([ADR-0005](../../docs/adr/0005-rag-answers-cite-or-abstain.md)): citations
+  are checked against the sources actually shown; invented ones make the answer *ungrounded*.
+- **Baselines first:** BM25 before embeddings, the extractive answerer before an LLM. Each must
+  win on the evaluation set to replace the simpler option.
+- **Tested limits:** the extractive baseline once split "1.5 billion" into two sentences; the fix
+  (split only after punctuation followed by whitespace) is covered by tests.
 
 ## News history from GDELT
 
@@ -83,9 +124,9 @@ python packages/nlp/examples/news_sentiment.py headlines.tsv --as-of 2026-11-02
 
 ## Roadmap
 
-- LLM backend interface (local via Ollama, or hosted APIs) for richer, explainable sentiment
-- RAG pipeline with citation and evaluation (annual report analyser)
-- Evaluation helpers: accuracy, macro-F1 and calibration against labelled samples
+- LLM-based sentiment backend using the `LanguageModel` interface
+- Re-ranking (cross-encoder) and query rewriting, judged on the same evaluation sets
+- Agentic workflows: tool-using agents over these components (MCP)
 
 ## Development
 
