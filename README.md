@@ -40,7 +40,7 @@ plugin registry that every package uses to select backends by name.
 | Framework | Domain | Status |
 |---|---|---|
 | [`finance`](frameworks/finance) | Stock Outlook model (market + news, walk-forward tested), Corporate Early Warning (Merton + SEC EDGAR), Credit Scorecard (WoE, points, reason codes, validation, fairness), Annual Report Analyser (RAG over 10-Ks) | ✅ V1.4 |
-| `climate` | Station data, anomalies, scenarios | Planned |
+| [`climate`](frameworks/climate) | Local climate change for any place: Open-Meteo (ERA5) and NASA GISTEMP data, six ETCCDI-style indices, trends with honest uncertainty; Kollam demo | ✅ V1.0 |
 | `mental-health` | Self-tracking and research tools, privacy first | Planned |
 | `heritage` | Sites, sources, evidence with confidence | Planned |
 

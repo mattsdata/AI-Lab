@@ -3,6 +3,10 @@
 ## [Unreleased]
 
 ### Added
+- `climate` framework V1.0: Open-Meteo (ERA5) daily history and NASA GISTEMP clients, six
+  annual indices (mean temperature, hot days, warm nights, rainfall, heavy rain days, wettest
+  day), place report with trends per decade, 95% intervals, plain verdicts and global context;
+  Kollam demo. Frameworks-independence rule now checks finance and climate.
 - `timeseries` package V1.0: causal rolling mean/std, calendar aggregation with a coverage
   rule, linear trend with autocorrelation-adjusted confidence interval (Monte Carlo tested),
   calendar-day climatology, anomalies and threshold flags. Extracted on second use (ADR-0003).

@@ -5,6 +5,7 @@ root_packages =
     ailab_ml
     ailab_timeseries
     ailab_finance
+    ailab_climate
 
 [importlinter:contract:packages-do-not-import-frameworks]
 name = Packages must never import frameworks (ADR-0001)
@@ -16,9 +17,11 @@ source_modules =
     ailab_timeseries
 forbidden_modules =
     ailab_finance
+    ailab_climate
 
 [importlinter:contract:frameworks-are-independent]
 name = Frameworks must not import each other
 type = independence
 modules =
     ailab_finance
+    ailab_climate
