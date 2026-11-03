@@ -2,7 +2,7 @@
 # 📜 ailab-mental-health :: tests
 # --------------------------------------------------------------------------------------------------
 #  File         : frameworks/mental-health/tests/test_mental_health.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.0
 #  License      : MIT (see LICENSE)

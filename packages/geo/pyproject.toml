@@ -9,7 +9,7 @@ description = "Terrain analysis, landform change (hillslope diffusion) and regio
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
+authors = [{ name = "Mathew Varghese" }]
 keywords = ["gis", "terrain", "dem", "lidar", "geomorphology"]
 classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
 dependencies = [

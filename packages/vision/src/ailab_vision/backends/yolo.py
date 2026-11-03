@@ -2,7 +2,7 @@
 # 📜 ailab-vision :: backends :: yolo
 # --------------------------------------------------------------------------------------------------
 #  File         : packages/vision/src/ailab_vision/backends/yolo.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.0
 #  License      : MIT (see LICENSE). Uses Ultralytics, which is AGPL-3.0 (see package README).

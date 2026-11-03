@@ -2,7 +2,7 @@
 # 📜 ailab-timeseries :: seasonal
 # --------------------------------------------------------------------------------------------------
 #  File         : packages/timeseries/src/ailab_timeseries/seasonal.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.0
 #  License      : MIT (see LICENSE)

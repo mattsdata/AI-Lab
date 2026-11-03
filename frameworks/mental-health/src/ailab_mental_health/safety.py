@@ -2,7 +2,7 @@
 # 📜 ailab-mental-health :: safety
 # --------------------------------------------------------------------------------------------------
 #  File         : frameworks/mental-health/src/ailab_mental_health/safety.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.0
 #  License      : MIT (see LICENSE)

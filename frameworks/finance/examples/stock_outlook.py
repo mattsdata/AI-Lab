@@ -2,7 +2,7 @@
 # 📜 ailab-finance :: examples :: stock_outlook
 # --------------------------------------------------------------------------------------------------
 #  File         : frameworks/finance/examples/stock_outlook.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.1
 #  License      : MIT (see LICENSE)

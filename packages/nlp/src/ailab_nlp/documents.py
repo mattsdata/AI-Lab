@@ -2,7 +2,7 @@
 # 📜 ailab-nlp :: documents
 # --------------------------------------------------------------------------------------------------
 #  File         : packages/nlp/src/ailab_nlp/documents.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.0
 #  License      : MIT (see LICENSE)

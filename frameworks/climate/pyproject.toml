@@ -9,7 +9,7 @@ description = "Local climate change analysis: Open-Meteo (ERA5) and NASA GISTEMP
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
+authors = [{ name = "Mathew Varghese" }]
 keywords = ["climate", "climate-change", "era5", "gistemp", "trend"]
 classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
 dependencies = [

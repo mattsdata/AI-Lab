@@ -2,7 +2,7 @@
 # 📜 ailab-nlp
 # --------------------------------------------------------------------------------------------------
 #  File         : packages/nlp/src/ailab_nlp/__init__.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.2
 #  License      : MIT (see LICENSE)

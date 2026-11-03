@@ -9,7 +9,7 @@ description = "Model-independent object detection and tracking: one interface, p
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
+authors = [{ name = "Mathew Varghese" }]
 keywords = ["computer-vision", "object-detection", "tracking", "yolo"]
 classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
 dependencies = [

@@ -9,7 +9,7 @@ description = "Explainable models and model-validation metrics: logistic regress
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
+authors = [{ name = "Mathew Varghese" }]
 keywords = ["machine-learning", "logistic-regression", "model-validation", "credit-scoring"]
 classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
 dependencies = [

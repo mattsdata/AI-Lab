@@ -2,7 +2,7 @@
 # 📜 ailab-finance
 # --------------------------------------------------------------------------------------------------
 #  File         : frameworks/finance/src/ailab_finance/__init__.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.4
 #  License      : MIT (see LICENSE)

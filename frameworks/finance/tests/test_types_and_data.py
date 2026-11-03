@@ -2,7 +2,7 @@
 # 📜 ailab-finance :: tests :: types and data
 # --------------------------------------------------------------------------------------------------
 #  File         : frameworks/finance/tests/test_types_and_data.py
-#  Author       : Mathew Varghese <removed@example.invalid>
+#  Author       : Mathew Varghese
 #  Created      : 2026-11-03
 #  Version      : V1.0
 #  License      : MIT (see LICENSE)
