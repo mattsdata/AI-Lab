@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ailab-nlp"
+version = "1.0.0"
+description = "Model-independent NLP components: sentiment analysis with lexicon and FinBERT backends, time-weighted aggregation."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Mathew Varghese", email = "removed@example.invalid" }]
+keywords = ["nlp", "sentiment", "finbert", "transformers"]
+classifiers = ["Programming Language :: Python :: 3", "Typing :: Typed"]
+dependencies = [
+  "mattslib @ git+https://github.com/mattsdata/mattslib.git",
+]
+
+[project.optional-dependencies]
+finbert = ["transformers>=4.40", "torch>=2.2"]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.6", "mypy>=1.10"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ailab_nlp"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# Word lists read better as space-separated strings than as 30-item list literals.
+"src/ailab_nlp/backends/lexicon.py" = ["SIM905"]
+
+[tool.mypy]
+strict = true
+python_version = "3.10"
+
+[[tool.mypy.overrides]]
+module = ["transformers.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]
+addopts = "--doctest-modules --cov=ailab_nlp --cov-report=term-missing --cov-fail-under=90"
