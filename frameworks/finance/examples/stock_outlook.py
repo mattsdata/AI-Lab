@@ -26,7 +26,7 @@
 #    - Research and education only. Not financial advice.
 #
 #  USAGE
-#    pip install -e "frameworks/finance[yahoo,news]"
+#    pip install -e "frameworks/finance[yahoo]"
 #    python frameworks/finance/examples/stock_outlook.py MSFT
 #    python frameworks/finance/examples/stock_outlook.py MSFT --gdelt '"Microsoft"'
 #    python frameworks/finance/examples/stock_outlook.py MSFT --headlines msft.tsv --backend finbert

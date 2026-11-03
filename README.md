@@ -19,13 +19,14 @@ enforced in CI with import-linter and explained in [ADR-0001](docs/adr/0001-laye
 | [0002](docs/adr/0002-decimal-money-float-analytics.md) | Decimal for money, float64 for analytics |
 | [0003](docs/adr/0003-extract-shared-code-on-second-use.md) | Extract shared code into a package on its second use |
 | [0004](docs/adr/0004-purged-walk-forward-against-a-baseline.md) | Judge forecasting models by purged walk-forward tests against a baseline |
+| [0005](docs/adr/0005-rag-answers-cite-or-abstain.md) | RAG answers must cite verifiable sources or abstain |
 
 ## Packages
 
 | Package | Scope | Status |
 |---|---|---|
 | [`vision`](packages/vision) | Object detection, tracking, video I/O | ✅ V1.1 |
-| [`nlp`](packages/nlp) | Sentiment (lexicon baseline, FinBERT), time-weighted aggregation. Next: LLM backends, RAG | ✅ V1.0 |
+| [`nlp`](packages/nlp) | Sentiment (lexicon, FinBERT), GDELT news, RAG (BM25 / embeddings / hybrid, LLM backends, verified citations, evaluation) | ✅ V1.2 |
 | `timeseries` | Forecasting, anomaly detection | Planned |
 | `speech` | Speech-to-text, text-to-speech | Planned |
 | `geo` | Raster, terrain and map utilities | Planned |
@@ -38,7 +39,7 @@ plugin registry that every package uses to select backends by name.
 
 | Framework | Domain | Status |
 |---|---|---|
-| [`finance`](frameworks/finance) | Stock Outlook model (market + news, walk-forward tested), Corporate Early Warning (Merton + SEC EDGAR), Credit Scorecard (WoE, points, reason codes, validation, fairness) | ✅ V1.3 |
+| [`finance`](frameworks/finance) | Stock Outlook model (market + news, walk-forward tested), Corporate Early Warning (Merton + SEC EDGAR), Credit Scorecard (WoE, points, reason codes, validation, fairness), Annual Report Analyser (RAG over 10-Ks) | ✅ V1.4 |
 | `climate` | Station data, anomalies, scenarios | Planned |
 | `mental-health` | Self-tracking and research tools, privacy first | Planned |
 | `heritage` | Sites, sources, evidence with confidence | Planned |

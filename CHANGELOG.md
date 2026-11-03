@@ -3,6 +3,11 @@
 ## [Unreleased]
 
 ### Added
+- `nlp` V1.2: RAG stack. Traceable chunking, HTML to text, BM25 / embedding / hybrid (RRF)
+  retrieval, `LanguageModel` interface with Ollama and OpenAI-compatible backends, `RagPipeline`
+  with verified citations and abstention, extractive baseline, `evaluate_rag`. ADR-0005.
+- `finance` V1.4: annual report analyser over 10-K filings (EDGAR filing lists and documents),
+  review memo with quoted sources; demo. `ailab-nlp` is now a finance dependency.
 - `ml` package V1.0: logistic regression (IRLS) and validation metrics (AUC, Gini, KS, Brier,
   calibration table, PSI), extracted from finance on second use (ADR-0003).
 - `finance` V1.3: credit scorecard with WoE binning, IV selection, points scaling, reason codes,

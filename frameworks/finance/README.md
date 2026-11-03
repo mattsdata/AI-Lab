@@ -1,6 +1,6 @@
 # ailab-finance
 
-*Author: **Mathew Varghese** · Version 1.3 · Research and education only. Not financial advice.*
+*Author: **Mathew Varghese** · Version 1.4 · Research and education only. Not financial advice.*
 
 Market analytics and the foundations of a **Corporate Early Warning System**: for a listed
 company, one view of its **equity outlook** (how its share price could move) and its
@@ -39,7 +39,8 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | `metrics` | Returns, annualised volatility, Sharpe, Sortino, max drawdown, historical VaR |
 | `credit` | Naive Merton distance to default (Bharath & Shumway, 2008), GREEN / AMBER / RED flags |
 | `scorecard` | Credit scorecard: WoE binning with missing-value bins, IV-based selection, points (600 at 50:1, PDO 20), reason codes, validation pack (AUC, Gini, KS, calibration, PSI), group fairness check |
-| `fundamentals` | SEC EDGAR client: point-in-time (by filing date) default point and shares outstanding, with the source filing for every number |
+| `annual_report` | Annual report analyser: standard analyst questions answered over a 10-K with RAG; review memo with quoted sources and uncovered topics |
+| `fundamentals` | SEC EDGAR client (facts, filing lists, primary documents): point-in-time (by filing date) default point and shares outstanding, with the source filing for every number |
 | `outlook` | Historical baseline: return range and probability of +10% / +25% / +50% over a horizon |
 | `forecast` | Outlook model: causal market + news-sentiment features, ridge + logistic model, purged walk-forward test with Brier skill vs the baseline |
 
@@ -66,6 +67,9 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
   comes with reason codes. Protected characteristics are never model inputs; they are used only
   afterwards to check approval rates across groups (adverse impact ratio). Tests document that
   Information Value is biased upward in small samples (pure noise reached 0.09 on 500 rows).
+- **Cite or abstain.** Report answers quote the filing's own words by character offset; a topic the
+  report does not cover is listed as "not found" rather than guessed
+  ([ADR-0005](../../docs/adr/0005-rag-answers-cite-or-abstain.md)).
 - **Pandas-free core.** NumPy only, so the framework is light and fully type-checked.
   Shared time-series code will move to a `timeseries` package when a second framework needs it
   ([ADR-0003](../../docs/adr/0003-extract-shared-code-on-second-use.md)).
@@ -81,6 +85,7 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | 4 | Company fundamentals from SEC EDGAR (debt, shares outstanding) | ✅ V1.2 |
 | 5 | Combined early warning report and demo | ✅ V1.2 |
 | 6 | Credit risk scorecard with validation and fairness check | ✅ V1.3 |
+| 7 | Annual report analyser (LLM + RAG over 10-K filings) | ✅ V1.4 |
 
 ## Data and licences
 
@@ -92,15 +97,20 @@ print(round(risk.distance_to_default, 2), f"{risk.default_probability:.2%}", war
 | NumPy | Arrays | BSD-3-Clause |
 | mattslib | Retries, logging, plugin registry | MIT |
 | ailab-ml | Logistic regression, validation metrics | MIT |
+| ailab-nlp | Sentiment, news, retrieval, LLM interface, RAG | MIT |
 
 ## Examples
 
 ```bash
-pip install -e "frameworks/finance[yahoo,news]"
+pip install -e "frameworks/finance[yahoo]"
 
 # Scenario 1: Stock Outlook (baseline vs model, with walk-forward evidence)
 python frameworks/finance/examples/stock_outlook.py MSFT
 python frameworks/finance/examples/stock_outlook.py MSFT --headlines msft.tsv --backend finbert
+
+# Annual report analyser: latest 10-K to a cited review memo (no model needed; or --llm ollama)
+export SEC_USER_AGENT="Your Name you@example.com"
+python frameworks/finance/examples/annual_report.py MSFT --llm ollama --model llama3.1
 
 # Credit scorecard: build, validate, explain, fairness check (synthetic book, runs offline)
 python frameworks/finance/examples/credit_scorecard.py
